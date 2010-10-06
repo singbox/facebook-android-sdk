@@ -49,15 +49,16 @@ public class FbDialog extends Dialog {
     static final int MARGIN = 4;
     static final int PADDING = 2;
     static final String DISPLAY_STRING = "touch";
-    static final String FB_ICON = "icon.png";
-    
+    // Name of resource copied from the "res" directory to local drawables
+    static final String FB_ICON = "facebook_icon";
+
     private String mUrl;
     private DialogListener mListener;
     private ProgressDialog mSpinner;
     private WebView mWebView;
     private LinearLayout mContent;
     private TextView mTitle;
-    
+
     public FbDialog(Context context, String url, DialogListener listener) {
         super(context);
         mUrl = url;
@@ -70,7 +71,7 @@ public class FbDialog extends Dialog {
         mSpinner = new ProgressDialog(getContext());
         mSpinner.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mSpinner.setMessage("Loading...");
-        
+
         mContent = new LinearLayout(getContext());
         mContent.setOrientation(LinearLayout.VERTICAL);
         setUpTitle();
@@ -86,8 +87,8 @@ public class FbDialog extends Dialog {
 
     private void setUpTitle() {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        Drawable icon = getContext().getResources().getDrawable(
-                R.drawable.facebook_icon);
+        int facebookIconResourceId = getContext().getResources().getIdentifier(FB_ICON, "drawable", getContext().getPackageName());
+        Drawable icon = getContext().getResources().getDrawable(facebookIconResourceId);
         mTitle = new TextView(getContext());
         mTitle.setText("Facebook");
         mTitle.setTextColor(Color.WHITE);
