@@ -369,8 +369,8 @@ public class Facebook {
      * @return boolean - whether this object has an non-expired session token
      */
     public boolean isSessionValid() {
-        return (getAccessToken() != null) && ((getAccessExpires() == 0) || 
-            (System.currentTimeMillis() < getAccessExpires()));
+        return (getAccessToken() != null && getAccessToken().length() > 0) &&
+          ((getAccessExpires() == 0) || (System.currentTimeMillis() < getAccessExpires()));
     }
 
     /**
