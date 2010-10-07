@@ -16,10 +16,6 @@
 
 package com.facebook.android;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.MalformedURLException;
-
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -27,6 +23,10 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.webkit.CookieSyncManager;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.MalformedURLException;
 
 /**
  * Main Facebook object for interacting with the Facebook developer API.
@@ -361,7 +361,15 @@ public class Facebook {
             Util.showAlert(context, "Error", 
                     "Application requires permission to access the Internet");
         } else {
-            new FbDialog(context, url, listener).show();
+            FbDialog dialog;
+            String message = parameters.getString("message");
+            if(message != null) {
+                dialog = new FbDialog(context, url, listener, message);
+            }
+            else {
+                dialog = new FbDialog(context, url, listener);
+            }
+            dialog.show();
         }
     }
 

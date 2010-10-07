@@ -37,6 +37,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.facebook.android.Facebook.DialogListener;
+import org.apache.http.util.EncodingUtils;
 
 public class FbDialog extends Dialog {
 
@@ -58,11 +59,17 @@ public class FbDialog extends Dialog {
     private WebView mWebView;
     private LinearLayout mContent;
     private TextView mTitle;
+    private String mDefaultMessageText;
 
     public FbDialog(Context context, String url, DialogListener listener) {
         super(context);
         mUrl = url;
         mListener = listener;
+    }
+
+    public FbDialog(Context context, String url, DialogListener listener, String messageText) {
+        this(context, url, listener);
+        mDefaultMessageText = messageText;
     }
 
     @Override
@@ -107,9 +114,18 @@ public class FbDialog extends Dialog {
         mWebView.setHorizontalScrollBarEnabled(false);
         mWebView.setWebViewClient(new FbDialog.FbWebViewClient());
         mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.loadUrl(mUrl);
+        mWebView.postUrl(mUrl, getPostData());
         mWebView.setLayoutParams(FILL);
         mContent.addView(mWebView);
+    }
+
+    private byte[] getPostData() {
+        StringBuffer postString = new StringBuffer();
+        if(mDefaultMessageText != null && mDefaultMessageText.length() > 0) {
+            postString.append("message=");
+            postString.append(mDefaultMessageText);
+        }
+        return EncodingUtils.getBytes(postString.toString(), "BASE64");
     }
 
     private class FbWebViewClient extends WebViewClient {
